@@ -1,14 +1,17 @@
 import os
-import requests
+import uvicorn
 from dotenv import load_dotenv
 from fastmcp import Client, Context, FastMCP
-from fastmcp.client.sampling import RequestContext, SamplingMessage, SamplingParams
+from starlette.applications import Starlette
+from starlette.routing import Mount
+
 
 load_dotenv()
 
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
-mcp = FastMCP("my-tools-server")
+# mcp = FastMCP("my-tools-server")
+mcp = FastMCP("my-new-mcp-tools")
 
 
 # @mcp.tool()
@@ -157,10 +160,15 @@ def add(a: int, b: int, sidenote: str) -> int:
 #     """
 #     return True
 
-
+app = Starlette(
+    routes=[
+        Mount("/", app=mcp.sse_app()),
+    ]
+)
 
 if __name__ == "__main__":
-    mcp.run()
+    # mcp.run()
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
 
