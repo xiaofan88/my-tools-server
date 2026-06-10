@@ -9,7 +9,7 @@ from starlette.routing import Mount
 load_dotenv()
 
 
-PORT = int(os.environ.get("PORT", "10000"))
+PORT = os.environ.get("PORT", "10000")
 
 os.environ["FASTMCP_HOST"] = "0.0.0.0"
 os.environ["FASTMCP_PORT"] = PORT
