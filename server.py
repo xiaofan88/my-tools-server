@@ -8,10 +8,14 @@ from starlette.routing import Mount
 
 load_dotenv()
 
-OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
-# mcp = FastMCP("my-tools-server")
-mcp = FastMCP("my-new-mcp-tools")
+PORT = int(os.environ.get("PORT", "10000"))
+
+mcp = FastMCP(
+    name="remote-demo",
+    host="0.0.0.0",
+    port=PORT,
+)
 
 
 @mcp.tool()
@@ -26,6 +30,7 @@ def add(a: int, b: int, api_key: str) -> int:
 
 
 if __name__ == "__main__":
+    print(f"Starting FastMCP on 0.0.0.0:{PORT}")
     mcp.run(transport="http")
 
 
