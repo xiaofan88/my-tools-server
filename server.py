@@ -11,11 +11,10 @@ load_dotenv()
 
 PORT = int(os.environ.get("PORT", "10000"))
 
-mcp = FastMCP(
-    name="remote-demo",
-    host="0.0.0.0",
-    port=PORT,
-)
+os.environ["FASTMCP_HOST"] = "0.0.0.0"
+os.environ["FASTMCP_PORT"] = PORT
+
+mcp = FastMCP("remote-demo")
 
 
 @mcp.tool()
