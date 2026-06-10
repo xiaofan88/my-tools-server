@@ -1,6 +1,7 @@
 import os
 import uvicorn
 from dotenv import load_dotenv
+import asyncio
 from fastmcp import Client, Context, FastMCP
 from starlette.applications import Starlette
 from starlette.routing import Mount
@@ -9,10 +10,7 @@ from starlette.routing import Mount
 load_dotenv()
 
 
-PORT = os.environ.get("PORT", "10000")
-
-os.environ["FASTMCP_HOST"] = "0.0.0.0"
-os.environ["FASTMCP_PORT"] = PORT
+PORT = int(os.environ.get("PORT", "10000"))
 
 mcp = FastMCP("remote-demo")
 
@@ -28,9 +26,15 @@ def add(a: int, b: int, api_key: str) -> int:
 
 
 
+async def main():
+    print(f"Starting FastMCP on 0.0.0.0:{PORT}", flush=True)
+    await mcp.run_http_async(
+        host="0.0.0.0",
+        port=PORT,
+    )
+
 if __name__ == "__main__":
-    print(f"Starting FastMCP on 0.0.0.0:{PORT}")
-    mcp.run(transport="http")
+    asyncio.run(main())
 
 
 
